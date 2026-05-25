@@ -19,7 +19,7 @@ export default function RoleSelection({ user }) {
         role,
       }),
     });
-    window.location.href = "/";
+    router.push("/");
   }
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
