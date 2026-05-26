@@ -17,6 +17,9 @@ export async function POST(req) {
       description: body.description,
       price: body.price,
       thumbnail: body.thumbnail || "",
+
+      instructorId: body.instructorId,
+      instructorName: body.instructorName,
     });
 
     return NextResponse.json({

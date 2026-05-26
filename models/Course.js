@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const topicSchema = new mongoose.Schema({
+const TopicSchema = new mongoose.Schema({
   title: String,
 
   type: {
@@ -8,44 +8,47 @@ const topicSchema = new mongoose.Schema({
     enum: ["video", "article"],
   },
 
-  videoUrl: String,
+  video: String,
 
-  articleContent: String,
-
-  freePreview: {
-    type: Boolean,
-    default: false,
-  },
+  article: String,
 });
 
-const chapterSchema = new mongoose.Schema({
+const ChapterSchema = new mongoose.Schema({
   title: String,
 
-  topics: [topicSchema],
+  topics: [TopicSchema],
 });
 
-const courseSchema = new mongoose.Schema(
+const CourseSchema = new mongoose.Schema(
   {
     title: String,
 
-    subtitle: String,
-
     description: String,
-
-    price: Number,
 
     thumbnail: String,
 
-    chapters: [chapterSchema],
+    price: {
+      type: Number,
+      default: 0,
+    },
 
-    published: {
+    category: String,
+
+    level: String,
+
+    instructor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+
+    chapters: [ChapterSchema],
+
+    isPublished: {
       type: Boolean,
       default: false,
     },
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true },
 );
 
-export default mongoose.models.Course || mongoose.model("Course", courseSchema);
+export default mongoose.models.Course || mongoose.model("Course", CourseSchema);

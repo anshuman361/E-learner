@@ -25,7 +25,18 @@ export default function CreateCourseForm() {
           "Content-Type": "application/json",
         },
 
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          title,
+          description,
+          price,
+          thumbnail,
+
+          instructorId: user?.id,
+
+          instructorName: user?.google?.name || user?.email?.address,
+
+          instructorEmail: user?.email?.address,
+        }),
       });
 
       const data = await res.json();

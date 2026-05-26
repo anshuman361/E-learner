@@ -1,9 +1,58 @@
-import CourseCard from "@/app/components/instructor/CourseCard";
-import { PlusCircle } from "lucide-react";
-import { getInstructorCourses } from "@/lib/getInstructorCourses";
+"use client";
+
+import { useEffect, useState } from "react";
+
+import { usePrivy } from "@privy-io/react-auth";
+
+//import InstructorSidebar from "@/components/instructor/InstructorSidebar";
+//import CourseCard from "@/components/instructor/CourseCard";
 import InstructorSidebar from "@/app/components/instructor/InstructorSidebar";
-export default async function DashboardPage() {
-  const courses = await getInstructorCourses();
+import CourseCard from "@/app/components/instructor/CourseCard";
+export default function DashboardPage() {
+  const { user, ready } = usePrivy();
+
+  const [courses, setCourses] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // wait until privy initializes
+    if (!ready) return;
+
+    // no logged-in user
+    if (!user?.id) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchCourses = async () => {
+      try {
+        const res = await fetch("/api/instructor/courses", {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            instructorId: user.id,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          setCourses(data.courses);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, [user, ready]);
 
   return (
     <div className="flex min-h-screen bg-[#f5f7fb]">
@@ -13,49 +62,36 @@ export default async function DashboardPage() {
       {/* Main */}
       <div className="flex-1 p-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-900">Dashboard</h1>
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-900">Dashboard</h1>
 
-            <p className="text-gray-500 mt-2">
-              Manage your courses and analytics
-            </p>
-          </div>
-
-          <button className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-xl font-medium transition">
-            <PlusCircle size={20} />
-            Create New Course
-          </button>
+          <p className="text-gray-500 mt-2">
+            Manage your courses and analytics
+          </p>
         </div>
 
-        {/* Courses */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
-          <div className="flex items-center gap-2 mb-6">
-            <div className="w-5 h-5 border-2 border-green-600 rounded"></div>
-
-            <h2 className="text-2xl font-semibold">My Courses</h2>
+        {/* Loading */}
+        {loading ? (
+          <div className="bg-white rounded-2xl p-10 shadow-sm">
+            <p className="text-lg font-medium">Loading courses...</p>
           </div>
+        ) : courses.length === 0 ? (
+          /* Empty */
+          <div className="bg-white rounded-2xl p-10 shadow-sm">
+            <h2 className="text-2xl font-semibold">No Courses Yet</h2>
 
-          {/* Empty State */}
-          {courses.length === 0 && (
-            <div className="text-center py-20">
-              <h3 className="text-2xl font-semibold text-gray-700">
-                No Courses Yet
-              </h3>
-
-              <p className="text-gray-500 mt-2">
-                Start by creating your first course
-              </p>
-            </div>
-          )}
-
-          {/* Course Grid */}
+            <p className="text-gray-500 mt-2">
+              Start by creating your first course
+            </p>
+          </div>
+        ) : (
+          /* Courses */
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {courses.map((course) => (
               <CourseCard key={course._id} course={course} />
             ))}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

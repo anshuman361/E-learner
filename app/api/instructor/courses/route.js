@@ -5,10 +5,8 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     await connectDB();
-
-    console.log("CONNECTED DB");
-
-    const courses = await Course.find();
+    const { instructorId } = await req.json();
+    const courses = await Course.find({ instructorId }).sort({ createdAt: -1 });
 
     console.log("COURSES:", courses);
 
