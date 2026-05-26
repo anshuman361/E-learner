@@ -32,7 +32,7 @@ export default function StudentNavbar() {
     },
     {
       name: "AI Assistant",
-      href: "/assistant",
+      href: "/student/assistant",
       icon: Bot,
     },
     {
