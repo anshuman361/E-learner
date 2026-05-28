@@ -5,11 +5,6 @@ const UserSchema = new mongoose.Schema(
     privyId: String,
 
     email: String,
-
-    name: String,
-
-    image: String,
-
     role: {
       type: String,
       enum: ["student", "instructor"],

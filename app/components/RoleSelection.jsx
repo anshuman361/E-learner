@@ -1,36 +1,20 @@
 "use client";
 
-import { useState } from "react";
-
-export default function RoleSelection({ user }) {
-  const [role, setRole] = useState("");
-
-  async function saveRole() {
-    await fetch("api/auth/sync-user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        privyId: user.id,
-        email: user.email?.address,
-        name: user.google?.name || "User",
-        image: user.google?.profilePictureUrl || "",
-        role,
-      }),
-    });
-    router.push("/");
-  }
+export default function RoleSelection({ setRole, saveRole, role }) {
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
-      <div className="bg-zinc-900 p-8 rounded-2xl w-[350px]">
-        <h2 className="text-2xl font-bold mb-6">Select Role</h2>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white p-8 rounded-3xl w-[400px]">
+        <h2 className="text-3xl font-bold mb-2 text-center">Select Role</h2>
+
+        <p className="text-gray-500 text-center mb-8">
+          Choose how you want to use E-Learner
+        </p>
 
         <div className="space-y-4">
           <button
             onClick={() => setRole("student")}
-            className={`w-full py-3 rounded-xl ${
-              role === "student" ? "bg-indigo-600" : "bg-zinc-800"
+            className={`w-full py-4 rounded-xl border text-lg font-semibold ${
+              role === "student" ? "bg-green-500 text-white" : "bg-white"
             }`}
           >
             Student
@@ -38,8 +22,8 @@ export default function RoleSelection({ user }) {
 
           <button
             onClick={() => setRole("instructor")}
-            className={`w-full py-3 rounded-xl ${
-              role === "instructor" ? "bg-indigo-600" : "bg-zinc-800"
+            className={`w-full py-4 rounded-xl border text-lg font-semibold ${
+              role === "instructor" ? "bg-green-500 text-white" : "bg-white"
             }`}
           >
             Instructor
@@ -47,9 +31,9 @@ export default function RoleSelection({ user }) {
         </div>
 
         <button
-          disabled={!role}
           onClick={saveRole}
-          className="w-full bg-green-600 py-3 rounded-xl mt-6"
+          disabled={!role}
+          className="w-full bg-black text-white py-4 rounded-xl mt-8 disabled:opacity-50"
         >
           Continue
         </button>

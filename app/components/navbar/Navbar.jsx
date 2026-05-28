@@ -18,22 +18,30 @@ export default function Navbar() {
 
         {/* Nav Links */}
         <nav className="hidden md:flex items-center gap-10 text-gray-700 font-medium">
-          <Link href="/courses" className="hover:text-green-500 transition">
-            Browse Courses
+          <Link
+            href="/student/assistant"
+            className="hover:text-green-500 transition"
+          >
+            AI Assistant
           </Link>
 
-          <Link href="/teach" className="hover:text-green-500 transition">
-            Teach on E-Learn
+          <Link href="/messages" className="hover:text-green-500 transition">
+            Message
           </Link>
         </nav>
 
         {/* Auth Buttons */}
         <div className="flex items-center gap-4">
-          <button className="text-gray-700 font-medium">Log in</button>
+          <Link href="/login" className="text-gray-700 font-medium">
+            Log in
+          </Link>
 
-          <button className="bg-green-500 hover:bg-green-600 transition text-white px-5 py-2 rounded-full font-medium">
+          <Link
+            href="/login"
+            className="bg-green-500 hover:bg-green-600 transition text-white px-5 py-2 rounded-full font-medium"
+          >
             Sign up
-          </button>
+          </Link>
         </div>
       </div>
     </header>

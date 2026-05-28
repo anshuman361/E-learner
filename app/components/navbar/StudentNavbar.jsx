@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   GraduationCap,
   Home,
@@ -14,15 +14,22 @@ import {
 } from "lucide-react";
 
 import { useState } from "react";
+import { usePrivy } from "@privy-io/react-auth";
 
 export default function StudentNavbar() {
+  const router = useRouter();
   const pathname = usePathname();
   const [mobileMenu, setMobileMenu] = useState(false);
-
+  const { logout } = usePrivy();
+  const handleLogout = async () => {
+    await logout();
+    localStorage.clear();
+    router.replace("/login");
+  };
   const navLinks = [
     {
       name: "Home",
-      href: "/",
+      href: "/student",
       icon: Home,
     },
     {
@@ -92,18 +99,20 @@ export default function StudentNavbar() {
           {/* USER IMAGE */}
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500 text-sm font-bold text-white shadow-md">
-              A
+              S
             </div>
 
             <div>
-              <p className="text-sm font-semibold text-gray-800">Anshuman</p>
-
-              <p className="text-xs text-gray-500">Student</p>
+              <p className="text-sm font-semibold text-gray-800">Student</p>
             </div>
           </div>
 
           {/* LOGOUT */}
-          <button className="flex items-center gap-2 rounded-xl border border-red-200 px-4 py-2 text-sm font-semibold text-red-500 transition-all hover:bg-red-50">
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex items-center gap-2 rounded-xl border border-red-200 px-4 py-2 text-sm font-semibold text-red-500 transition-all hover:bg-red-50"
+          >
             <LogOut size={18} />
             Logout
           </button>

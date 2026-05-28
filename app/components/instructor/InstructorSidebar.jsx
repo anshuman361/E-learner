@@ -17,7 +17,7 @@ const menuItems = [
   {
     title: "Message",
     icon: BarChart3,
-    href: "/instructor/analytics",
+    href: "/messages",
   },
   {
     title: "Settings",

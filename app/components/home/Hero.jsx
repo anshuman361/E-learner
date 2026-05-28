@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Hero() {
   return (
     <section className="px-6 py-20">
@@ -18,13 +20,19 @@ export default function Hero() {
           </p>
 
           <div className="flex gap-4 mt-8">
-            <button className="bg-green-500 text-white px-6 py-3 rounded-xl">
+            <Link
+              href="/student/courses"
+              className="bg-green-500 text-white px-6 py-3 rounded-xl"
+            >
               Explore Courses
-            </button>
+            </Link>
 
-            <button className="border px-6 py-3 rounded-xl">
+            <Link
+              href="/instructor/dashboard"
+              className="border px-6 py-3 rounded-xl"
+            >
               Become Instructor
-            </button>
+            </Link>
           </div>
         </div>
 
