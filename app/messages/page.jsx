@@ -5,11 +5,17 @@ import { socket } from "@/lib/socket";
 export default function MessagePage() {
   const { user } = usePrivy();
   const currentUserId = user?.id;
-  const currentRole = localStorage.getItem("role");
+  // const currentRole = localStorage.getItem("role");
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
+
+  const [currentRole, setCurrentRole] = useState("");
+
+  useEffect(() => {
+    setCurrentRole(localStorage.getItem("role") || "");
+  }, []);
 
   // SOCKET
   useEffect(() => {

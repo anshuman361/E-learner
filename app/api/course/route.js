@@ -1,26 +1,9 @@
 import { NextResponse } from "next/server";
 
-import connectDB from "@/lib/connectDB";
+//import connectDB from "@/lib/connectDB";
 import Course from "@/models/Course";
+import connectDB from "@/lib/mongodb";
 
-// export async function GET() {
-//   try {
-//     await connectDB();
-
-//     const courses = await Course.find({
-//       isPublished: true,
-//     }).populate("instructor");
-
-//     return NextResponse.json(courses);
-//   } catch (error) {
-//     return NextResponse.json(
-//       {
-//         error: error.message,
-//       },
-//       { status: 500 }
-//     );
-//   }
-// }
 export async function POST(req) {
   try {
     await connectDB();
