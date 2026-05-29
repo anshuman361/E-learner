@@ -6,6 +6,7 @@ export default function EnrollButton({ courseId, studentId }) {
   const router = useRouter();
 
   async function handleEnroll() {
+    console.log("Enroll clicked");
     const res = await fetch("/api/enroll", {
       method: "POST",
 
@@ -19,15 +20,17 @@ export default function EnrollButton({ courseId, studentId }) {
       }),
     });
 
+    const data = await res.json();
+    alert("Enrolled Successfully");
     if (res.ok) {
-      router.push(`/student/learn/${courseId}`);
+      router.push(`/student/courses/${courseId}`);
     }
   }
 
   return (
     <button
       onClick={handleEnroll}
-      className="w-full rounded-2xl bg-green-500 py-4 text-lg font-bold text-white hover:bg-green-600"
+      className="mt-10 rounded-2xl bg-white px-8 py-4 text-lg font-bold text-green-600 shadow-lg hover:scale-105 transition"
     >
       Enroll Now
     </button>

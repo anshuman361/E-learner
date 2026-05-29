@@ -1,8 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { use, useState } from "react";
 
-export default function CurriculumPage() {
+export default function CurriculumPage({ params }) {
+  const router = useRouter();
+  const resolvedParams = use(params);
+
+  const courseId = resolvedParams.courseId;
   const [chapters, setChapters] = useState([]);
 
   // ADD CHAPTER
@@ -12,7 +17,6 @@ export default function CurriculumPage() {
 
       {
         title: "",
-
         topics: [],
       },
     ]);
@@ -39,14 +43,10 @@ export default function CurriculumPage() {
       video: null,
 
       article: "",
-
-      freePreview: false,
     });
 
     setChapters(updated);
   };
-
-  // UPDATE TOPIC TITLE
   const updateTopicTitle = (chapterIndex, topicIndex, value) => {
     const updated = [...chapters];
 
@@ -105,21 +105,30 @@ export default function CurriculumPage() {
     setChapters(updated);
   };
 
-  // FREE PREVIEW
-  const togglePreview = (chapterIndex, topicIndex) => {
-    const updated = [...chapters];
-
-    updated[chapterIndex].topics[topicIndex].freePreview =
-      !updated[chapterIndex].topics[topicIndex].freePreview;
-
-    setChapters(updated);
-  };
-
   // PUBLISH
-  const publishCourse = () => {
-    console.log(chapters);
+  const publishCourse = async () => {
+    const res = await fetch("/api/course/publish", {
+      method: "POST",
 
-    alert("Course Published");
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        courseId,
+
+        chapters,
+      }),
+    });
+
+    const data = await res.json();
+
+    console.log(data);
+
+    if (data.success) {
+      alert("Course Published Successfully");
+      router.push("/instructor/dashboard");
+    }
   };
 
   return (
@@ -245,19 +254,6 @@ export default function CurriculumPage() {
                       className="border rounded-lg p-4 w-full h-40"
                     />
                   )}
-
-                  {/* FREE PREVIEW */}
-
-                  <div className="mt-5">
-                    <label className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={topic.freePreview}
-                        onChange={() => togglePreview(chapterIndex, topicIndex)}
-                      />
-                      Free Preview
-                    </label>
-                  </div>
                 </div>
               ))}
             </div>

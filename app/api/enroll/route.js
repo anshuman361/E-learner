@@ -1,30 +1,33 @@
 import { NextResponse } from "next/server";
 import Enrollment from "@/models/Enrollment";
 import connectDB from "@/lib/mongodb";
+
 export async function POST(req) {
   try {
     await connectDB();
 
     const body = await req.json();
 
-    const alreadyEnrolled = await Enrollment.findOne({
-      student: body.studentId,
-      course: body.courseId,
+    console.log("BODY:", body);
+
+    const exists = await Enrollment.findOne({
+      studentId: body.studentId,
+      courseId: body.courseId,
     });
 
-    if (alreadyEnrolled) {
+    if (exists) {
       return NextResponse.json({
         message: "Already enrolled",
       });
     }
-
     const enrollment = await Enrollment.create({
-      student: body.studentId,
-      course: body.courseId,
+      studentId: body.studentId,
+      courseId: body.courseId,
     });
 
     return NextResponse.json(enrollment);
   } catch (error) {
+    console.error("ENROLL ERROR:", error);
     return NextResponse.json(
       {
         error: error.message,

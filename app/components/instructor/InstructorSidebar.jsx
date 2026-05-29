@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { LayoutDashboard, BookOpen, BarChart3, Settings } from "lucide-react";
+import {
+  LayoutDashboard,
+  BookOpen,
+  BarChart3,
+  Settings,
+  MessageCircle,
+} from "lucide-react";
 
 const menuItems = [
   {
@@ -16,7 +22,7 @@ const menuItems = [
   },
   {
     title: "Message",
-    icon: BarChart3,
+    icon: MessageCircle,
     href: "/messages",
   },
   {

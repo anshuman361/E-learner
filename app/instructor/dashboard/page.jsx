@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 
 import { usePrivy } from "@privy-io/react-auth";
 
-//import InstructorSidebar from "@/components/instructor/InstructorSidebar";
-//import CourseCard from "@/components/instructor/CourseCard";
 import InstructorSidebar from "@/app/components/instructor/InstructorSidebar";
 import CourseCard from "@/app/components/instructor/CourseCard";
 export default function DashboardPage() {
@@ -15,45 +13,64 @@ export default function DashboardPage() {
 
   const [loading, setLoading] = useState(true);
 
+  // useEffect(() => {
+  //   // wait until privy initializes
+  //   if (!ready) return;
+
+  //   // no logged-in user
+  //   if (!user?.id) {
+  //     setLoading(false);
+  //     return;
+  //   }
+
+  //   const fetchCourses = async () => {
+  //     try {
+  //       const res = await fetch("/api/instructor/courses", {
+  //         method: "POST",
+
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+
+  //         body: JSON.stringify({
+  //           instructorId: user.id,
+  //         }),
+  //       });
+
+  //       const data = await res.json();
+
+  //       if (data.success) {
+  //         setCourses(data.courses);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchCourses();
+  // }, [user, ready]);
   useEffect(() => {
-    // wait until privy initializes
-    if (!ready) return;
-
-    // no logged-in user
-    if (!user?.id) {
-      setLoading(false);
-      return;
-    }
-
-    const fetchCourses = async () => {
-      try {
-        const res = await fetch("/api/instructor/courses", {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json",
-          },
-
-          body: JSON.stringify({
-            instructorId: user.id,
-          }),
-        });
-
-        const data = await res.json();
-
-        if (data.success) {
-          setCourses(data.courses);
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchCourses();
-  }, [user, ready]);
+  }, []);
+  const fetchCourses = async () => {
+    try {
+      const res = await fetch("/api/course/all");
 
+      const data = await res.json();
+
+      console.log(data);
+
+      if (data.success) {
+        setCourses(data.courses);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="flex min-h-screen bg-[#f5f7fb]">
       {/* Sidebar */}

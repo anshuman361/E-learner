@@ -1,18 +1,27 @@
-import connectDB from "@/lib/mongodb";
-import Course from "@/models/Course";
 import { NextResponse } from "next/server";
+
+import connectDB from "@/lib/mongodb";
+
+import Course from "@/models/Course";
 
 export async function GET() {
   try {
     await connectDB();
-    const courses = await Course.find({
-      isPublished: true,
+
+    const courses = await Course.find().sort({
+      createdAt: -1,
     });
-    return NextResponse.json(courses);
+
+    return NextResponse.json({
+      success: true,
+
+      courses,
+    });
   } catch (error) {
     return NextResponse.json(
       {
-        error: error.message,
+        success: false,
+        message: error.message,
       },
       { status: 500 },
     );

@@ -5,19 +5,35 @@ import { useRouter } from "next/navigation";
 
 export default function CreateCourseForm() {
   const router = useRouter();
+  const [thumbnailFile, setThumbnailFile] = useState(null);
 
   const [formData, setFormData] = useState({
     title: "",
-    subtitle: "",
+    category: "",
     description: "",
     price: 0,
-    thumbnail: null,
   });
+
+  const uploadThumbnail = async () => {
+    const formData = new FormData();
+
+    formData.append("file", thumbnailFile);
+
+    const res = await fetch("/api/upload-image", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    return data.imageUrl;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      const thumbnailUrl = await uploadThumbnail();
       const res = await fetch("/api/course/create", {
         method: "POST",
 
@@ -26,16 +42,9 @@ export default function CreateCourseForm() {
         },
 
         body: JSON.stringify({
-          title,
-          description,
-          price,
-          thumbnail,
+          ...formData,
 
-          instructorId: user?.id,
-
-          instructorName: user?.google?.name || user?.email?.address,
-
-          instructorEmail: user?.email?.address,
+          thumbnail: thumbnailUrl,
         }),
       });
 
@@ -72,12 +81,12 @@ export default function CreateCourseForm() {
 
       <input
         type="text"
-        placeholder="Subtitle"
+        placeholder="Category"
         className="w-full border p-3 rounded"
         onChange={(e) =>
           setFormData({
             ...formData,
-            subtitle: e.target.value,
+            category: e.target.value,
           })
         }
       />
@@ -110,12 +119,7 @@ export default function CreateCourseForm() {
         placeholder="Image"
         className="w-full border px-1 py-1 mt-2 rounded"
         accept="image/*"
-        onChange={(e) =>
-          setFormData({
-            ...formData,
-            thumbnail: e.target.files[0],
-          })
-        }
+        onChange={(e) => setThumbnailFile(e.target.files[0])}
       />
 
       <button className="bg-green-600 text-white px-6 py-3 rounded">

@@ -1,12 +1,17 @@
 import StudentNavbar from "@/app/components/navbar/StudentNavbar";
+import EnrollButton from "@/app/components/student/Enrollbutton";
 
 import connectDB from "@/lib/mongodb";
 import Course from "@/models/Course";
+import User from "@/models/User";
 
 async function getCourse(id) {
   await connectDB();
 
   const course = await Course.findById(id);
+  const user = await User.findOne({
+    email: "12deori23@gmail.com",
+  });
 
   return JSON.parse(JSON.stringify(course));
 }
@@ -16,22 +21,12 @@ export default async function SingleCoursePage({ params }) {
   const { id } = await params;
   const allCourses = await Course.find();
 
-  console.log("ALL COURSES:", allCourses);
-
   const course = await Course.findById(id);
-
-  console.log("FOUND COURSE:", course);
-  console.log("COURSE:", course);
-
-  console.log("PARAMS:", params);
+  const user = await User.findOne({
+    email: "12deori23@gmail.com",
+  });
 
   const resolvedParams = await params;
-
-  console.log("RESOLVED:", resolvedParams);
-
-  //const id = resolvedParams.id;
-
-  // console.log("ID:", id);
 
   if (!course) {
     return <div className="p-10 text-3xl font-bold">Course not found</div>;
@@ -58,9 +53,13 @@ export default async function SingleCoursePage({ params }) {
                   {course.description}
                 </p>
 
-                <button className="mt-10 rounded-2xl bg-white px-8 py-4 text-lg font-bold text-green-600 shadow-lg hover:scale-105 transition">
+                <EnrollButton
+                  courseId={course._id.toString()}
+                  studentId={user._id.toString()}
+                />
+                {/* <button className="mt-10 rounded-2xl bg-white px-8 py-4 text-lg font-bold text-green-600 shadow-lg hover:scale-105 transition">
                   Enroll Now
-                </button>
+                </button> */}
               </div>
 
               {/* RIGHT */}
@@ -87,13 +86,24 @@ export default async function SingleCoursePage({ params }) {
                     {chapter.title}
                   </h3>
 
-                  <div className="mt-5 space-y-3">
+                  <div className="mt-5 space-y-4">
                     {chapter.topics?.map((topic, idx) => (
-                      <div
-                        key={idx}
-                        className="rounded-xl bg-gray-100 px-4 py-3"
-                      >
-                        {topic.title}
+                      <div key={idx} className="rounded-xl bg-gray-100 p-4">
+                        <h4 className="font-semibold">{topic.title}</h4>
+
+                        <p className="text-sm text-gray-500">{topic.type}</p>
+
+                        {topic.type === "video" && topic.video && (
+                          <video controls className="mt-3 w-full rounded-lg">
+                            <source src={topic.video} />
+                          </video>
+                        )}
+
+                        {topic.type === "article" && topic.article && (
+                          <div className="mt-3 rounded-lg bg-white p-4">
+                            {topic.article}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>

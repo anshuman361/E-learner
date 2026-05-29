@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 
 import connectDB from "@/lib/mongodb";
 import Course from "@/models/Course";
-
 export async function POST(req) {
   try {
     await connectDB();
@@ -13,13 +12,10 @@ export async function POST(req) {
 
     const course = await Course.create({
       title: body.title,
-      subtitle: body.subtitle,
+      category: body.category,
       description: body.description,
       price: body.price,
-      thumbnail: body.thumbnail || "",
-
-      instructorId: body.instructorId,
-      instructorName: body.instructorName,
+      thumbnail: body.thumbnail,
     });
 
     return NextResponse.json({

@@ -1,41 +1,27 @@
 "use client";
-
 import { useEffect, useState } from "react";
-
 import { usePrivy } from "@privy-io/react-auth";
-
 import { socket } from "@/lib/socket";
-
 export default function MessagePage() {
   const { user } = usePrivy();
-
   const currentUserId = user?.id;
-
   const currentRole = localStorage.getItem("role");
-
   const [users, setUsers] = useState([]);
-
   const [selectedUser, setSelectedUser] = useState(null);
-
   const [messages, setMessages] = useState([]);
-
   const [text, setText] = useState("");
 
   // SOCKET
   useEffect(() => {
     if (!currentUserId) return;
-
     socket.connect();
-
     socket.emit("join", currentUserId);
-
     socket.on("receiveMessage", (msg) => {
       setMessages((prev) => [...prev, msg]);
     });
 
     return () => {
       socket.off("receiveMessage");
-
       socket.disconnect();
     };
   }, [currentUserId]);
@@ -44,28 +30,22 @@ export default function MessagePage() {
   useEffect(() => {
     async function loadUsers() {
       const roleToFetch = currentRole === "student" ? "instructor" : "student";
-
       const res = await fetch(`/api/users?role=${roleToFetch}`);
-
       const data = await res.json();
-
       if (Array.isArray(data)) {
         setUsers(data);
       }
     }
-
     loadUsers();
   }, [currentRole]);
 
   // OPEN CHAT
   async function openChat(userData) {
     setSelectedUser(userData);
-
     try {
       const res = await fetch(
         `/api/messages?senderId=${currentUserId}&receiverId=${userData.privyId}`,
       );
-
       const data = await res.json();
 
       if (Array.isArray(data)) {
@@ -75,7 +55,6 @@ export default function MessagePage() {
       }
     } catch (error) {
       console.log(error);
-
       setMessages([]);
     }
   }

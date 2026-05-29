@@ -1,4 +1,4 @@
-import { BookOpen, Users, Award } from "lucide-react";
+import { BookOpen, Users, MessageCircleCheck } from "lucide-react";
 
 const features = [
   {
@@ -14,9 +14,9 @@ const features = [
   },
 
   {
-    title: "Certification",
-    desc: "Earn certificates upon completion to showcase your skills.",
-    icon: Award,
+    title: "Message",
+    desc: "Message your instructor Or chat with Assistant",
+    icon: MessageCircleCheck,
   },
 ];
 

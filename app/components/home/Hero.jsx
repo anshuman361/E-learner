@@ -6,7 +6,7 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 items-center">
         <div>
           <p className="bg-green-100 text-green-700 px-4 py-2 rounded-full inline-block">
-            Over 500 new courses this month
+            Learn from best Courses
           </p>
 
           <h1 className="text-6xl font-bold leading-tight mt-6">
@@ -15,8 +15,7 @@ export default function Hero() {
           </h1>
 
           <p className="text-gray-500 mt-6 text-lg">
-            Start, switch, or advance your career with thousands of courses from
-            expert instructors.
+            Ask doubts, generate Summary or take Quiz using AI Assistant
           </p>
 
           <div className="flex gap-4 mt-8">

@@ -2,14 +2,16 @@ import mongoose from "mongoose";
 
 const EnrollmentSchema = new mongoose.Schema(
   {
-    student: {
+    studentId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
 
-    course: {
+    courseId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
+      required: true,
     },
   },
   { timestamps: true },

@@ -78,7 +78,7 @@ export default function FeaturedCourses() {
                       E
                     </div>
 
-                    <p className="text-sm text-gray-600">Emmanuel</p>
+                    <p className="text-sm text-gray-600">Anshuman</p>
                   </div>
 
                   <div className="font-bold text-lg">{course.price}</div>
