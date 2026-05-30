@@ -12,7 +12,8 @@ async function getCourse(id) {
 }
 
 export default async function SingleCoursePage({ params }) {
-  const { id } = params;
+  console.log("PARAMS:", params);
+  const { id } = await params;
 
   console.log("PARAM ID:", id);
 
