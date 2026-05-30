@@ -7,27 +7,17 @@ import User from "@/models/User";
 
 async function getCourse(id) {
   await connectDB();
-
   const course = await Course.findById(id);
-  const user = await User.findOne({
-    email: "12deori23@gmail.com",
-  });
-
   return JSON.parse(JSON.stringify(course));
 }
 
 export default async function SingleCoursePage({ params }) {
-  // IMPORTANT FIX
-  const { id } = await params;
-  const allCourses = await Course.find();
-
+  const { id } = params;
+  await connectDB();
   const course = await Course.findById(id);
   const user = await User.findOne({
     email: "12deori23@gmail.com",
   });
-
-  const resolvedParams = await params;
-
   if (!course) {
     return <div className="p-10 text-3xl font-bold">Course not found</div>;
   }
@@ -57,9 +47,6 @@ export default async function SingleCoursePage({ params }) {
                   courseId={course._id.toString()}
                   studentId={user._id.toString()}
                 />
-                {/* <button className="mt-10 rounded-2xl bg-white px-8 py-4 text-lg font-bold text-green-600 shadow-lg hover:scale-105 transition">
-                  Enroll Now
-                </button> */}
               </div>
 
               {/* RIGHT */}
