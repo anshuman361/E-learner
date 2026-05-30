@@ -2,7 +2,7 @@ import StudentNavbar from "@/app/components/navbar/StudentNavbar";
 import CourseCard from "@/app/components/student/CourseCard";
 
 async function getCourses() {
-  const res = await fetch("http://localhost:3000/api/courses", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/courses`, {
     cache: "no-store",
   });
 
