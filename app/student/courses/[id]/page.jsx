@@ -13,8 +13,14 @@ async function getCourse(id) {
 
 export default async function SingleCoursePage({ params }) {
   const { id } = params;
+
+  console.log("PARAM ID:", id);
+
   await connectDB();
+
   const course = await Course.findById(id);
+
+  console.log("COURSE:", course);
   const user = await User.findOne({
     email: "12deori23@gmail.com",
   });
