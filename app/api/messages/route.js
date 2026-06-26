@@ -33,7 +33,7 @@ export async function GET(req) {
           receiverId: senderId,
         },
       ],
-    });
+    }).sort({ createdAt: 1 });
     return NextResponse.json(messages);
   } catch (error) {
     return NextResponse.json({ error: error.message });

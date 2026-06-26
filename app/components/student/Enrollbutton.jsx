@@ -1,38 +1,61 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-export default function EnrollButton({ courseId, studentId }) {
-  const router = useRouter();
+export default function EnrollButton({ courseId, studentId, onEnroll }) {
+  const [loading, setLoading] = useState(false);
 
   async function handleEnroll() {
-    console.log("Enroll clicked");
-    const res = await fetch("/api/enroll", {
-      method: "POST",
+    try {
+      setLoading(true);
 
-      headers: {
-        "Content-Type": "application/json",
-      },
+      const res = await fetch("/api/enroll", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          studentId,
+          courseId,
+        }),
+      });
 
-      body: JSON.stringify({
-        studentId,
-        courseId,
-      }),
-    });
+      const data = await res.json();
 
-    const data = await res.json();
-    alert("Enrolled Successfully");
-    if (res.ok) {
-      router.push(`/student/courses/${courseId}`);
+      if (!res.ok) {
+        if (data.message === "Already Enrolled") {
+          onEnroll(); // Show course content
+          return;
+        }
+
+        alert(data.message || "Enrollment Failed");
+        return;
+      }
+
+      alert("🎉 Enrolled Successfully");
+
+      // Tell parent component
+      onEnroll();
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
     <button
+      disabled={loading}
       onClick={handleEnroll}
-      className="mt-10 rounded-2xl bg-white px-8 py-4 text-lg font-bold text-green-600 shadow-lg hover:scale-105 transition"
+      className={`mt-10 rounded-2xl px-8 py-4 text-lg font-bold shadow-lg transition
+      ${
+        loading
+          ? "bg-gray-400 text-white cursor-not-allowed"
+          : "m-5 mt-0.5 mb-1 w-half rounded-2xl bg-green-600 px-5 py-5 text-lg font-bold text-white shadow-lg hover:bg-green-700 transition"
+      }`}
     >
-      Enroll Now
+      {loading ? "Enrolling..." : "Enroll Now"}
     </button>
   );
 }

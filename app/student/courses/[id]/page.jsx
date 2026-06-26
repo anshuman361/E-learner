@@ -1,33 +1,26 @@
 import StudentNavbar from "@/app/components/navbar/StudentNavbar";
-import EnrollButton from "@/app/components/student/Enrollbutton";
+import CourseContent from "@/app/components/student/CourseContent";
 
 import connectDB from "@/lib/mongodb";
 import Course from "@/models/Course";
 import User from "@/models/User";
 
-async function getCourse(id) {
-  await connectDB();
-  const course = await Course.findById(id);
-  return JSON.parse(JSON.stringify(course));
-}
-
 export default async function SingleCoursePage({ params }) {
-  console.log("PARAMS:", params);
   const { id } = await params;
 
-  console.log("PARAM ID:", id);
-
   await connectDB();
 
   const course = await Course.findById(id);
 
-  console.log("COURSE:", course);
-  const user = await User.findOne({
-    email: "12deori23@gmail.com",
-  });
   if (!course) {
     return <div className="p-10 text-3xl font-bold">Course not found</div>;
   }
+
+  // TEMPORARY
+  // Replace this later logged-in user
+  const user = await User.findOne({
+    email: "12deori23@gmail.com",
+  });
 
   return (
     <>
@@ -39,6 +32,7 @@ export default async function SingleCoursePage({ params }) {
           <div className="mx-auto max-w-7xl px-6">
             <div className="grid gap-10 md:grid-cols-2">
               {/* LEFT */}
+
               <div>
                 <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-green-100">
                   {course.category}
@@ -49,14 +43,10 @@ export default async function SingleCoursePage({ params }) {
                 <p className="mt-6 text-lg text-green-50">
                   {course.description}
                 </p>
-
-                <EnrollButton
-                  courseId={course._id.toString()}
-                  studentId={user._id.toString()}
-                />
               </div>
 
               {/* RIGHT */}
+
               <div>
                 <img
                   src={course.thumbnail}
@@ -68,44 +58,10 @@ export default async function SingleCoursePage({ params }) {
           </div>
         </div>
 
-        {/* CONTENT */}
-        <div className="mx-auto max-w-7xl px-6 py-14">
-          <div className="rounded-3xl bg-white p-8 shadow-sm">
-            <h2 className="mb-8 text-3xl font-bold">Course Content</h2>
-
-            <div className="space-y-6">
-              {course.chapters?.map((chapter, index) => (
-                <div key={index} className="rounded-2xl border p-6">
-                  <h3 className="text-2xl font-bold text-green-600">
-                    {chapter.title}
-                  </h3>
-
-                  <div className="mt-5 space-y-4">
-                    {chapter.topics?.map((topic, idx) => (
-                      <div key={idx} className="rounded-xl bg-gray-100 p-4">
-                        <h4 className="font-semibold">{topic.title}</h4>
-
-                        <p className="text-sm text-gray-500">{topic.type}</p>
-
-                        {topic.type === "video" && topic.video && (
-                          <video controls className="mt-3 w-full rounded-lg">
-                            <source src={topic.video} />
-                          </video>
-                        )}
-
-                        {topic.type === "article" && topic.article && (
-                          <div className="mt-3 rounded-lg bg-white p-4">
-                            {topic.article}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <CourseContent
+          course={JSON.parse(JSON.stringify(course))}
+          studentId={user._id.toString()}
+        />
       </div>
     </>
   );

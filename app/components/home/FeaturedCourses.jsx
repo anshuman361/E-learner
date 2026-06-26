@@ -5,7 +5,7 @@ const courses = [
     category: "DEVELOPMENT",
     image:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200",
-    price: "$100",
+    price: "₹2999",
   },
 
   {
@@ -23,7 +23,7 @@ const courses = [
     category: "WEB",
     image:
       "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200",
-    price: "$80",
+    price: "₹599",
   },
 ];
 
@@ -75,7 +75,7 @@ export default function FeaturedCourses() {
                 <div className="flex items-center justify-between mt-6">
                   <div className="flex items-center gap-2">
                     <div className="w-9 h-9 rounded-full bg-green-500 text-white flex items-center justify-center">
-                      E
+                      A
                     </div>
 
                     <p className="text-sm text-gray-600">Anshuman</p>

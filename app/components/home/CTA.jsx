@@ -1,3 +1,4 @@
+import Link from "next/link";
 export default function CTA() {
   return (
     <section className="py-24 px-6 bg-gradient-to-r from-green-500 to-emerald-600 text-white">

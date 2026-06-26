@@ -4,9 +4,10 @@ import Link from "next/link";
 import {
   LayoutDashboard,
   BookOpen,
-  BarChart3,
   Settings,
   MessageCircle,
+  LogOut,
+  LogOutIcon,
 } from "lucide-react";
 
 const menuItems = [
@@ -26,9 +27,9 @@ const menuItems = [
     href: "/messages",
   },
   {
-    title: "Settings",
-    icon: Settings,
-    href: "/instructor/settings",
+    title: "LogOut",
+    icon: LogOutIcon,
+    href: "/",
   },
 ];
 
@@ -38,7 +39,7 @@ export default function InstructorSidebar() {
       {/* Logo */}
       <div className="flex items-center gap-3 mb-10">
         <div className="w-12 h-12 rounded-xl bg-green-600 flex items-center justify-center text-white font-bold text-xl">
-          E
+          I
         </div>
 
         <h1 className="text-3xl font-bold">Instructor</h1>

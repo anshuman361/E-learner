@@ -2,20 +2,39 @@
 import { useEffect, useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
 import { socket } from "@/lib/socket";
+
 export default function MessagePage() {
   const { user } = usePrivy();
+  const [currentRole, setCurrentRole] = useState("");
+  const email = user?.email?.address || user?.google?.email;
   const currentUserId = user?.id;
-  // const currentRole = localStorage.getItem("role");
+
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
 
-  const [currentRole, setCurrentRole] = useState("");
-
   useEffect(() => {
-    setCurrentRole(localStorage.getItem("role") || "");
-  }, []);
+    if (!email) return;
+
+    async function fetchCurrentUser() {
+      try {
+        const res = await fetch(
+          `/api/auth/sync-user?email=${encodeURIComponent(email)}`,
+        );
+
+        const data = await res.json();
+
+        if (data.success && data.user) {
+          setCurrentRole(data.user.role);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    fetchCurrentUser();
+  }, [email]);
 
   // SOCKET
   useEffect(() => {
@@ -44,6 +63,14 @@ export default function MessagePage() {
     }
     loadUsers();
   }, [currentRole]);
+
+  if (!currentRole) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <p className="text-lg font-medium">Loading...</p>
+      </div>
+    );
+  }
 
   // OPEN CHAT
   async function openChat(userData) {

@@ -33,7 +33,7 @@ export default function Navbar() {
         {/* Auth Buttons */}
         <div className="flex items-center gap-4">
           <Link href="/login" className="text-gray-700 font-medium">
-            Log in
+            Login
           </Link>
 
           <Link

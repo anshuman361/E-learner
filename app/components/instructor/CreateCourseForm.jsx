@@ -16,7 +16,6 @@ export default function CreateCourseForm() {
 
   const uploadThumbnail = async () => {
     const formData = new FormData();
-
     formData.append("file", thumbnailFile);
 
     const res = await fetch("/api/upload-image", {
@@ -64,8 +63,8 @@ export default function CreateCourseForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-2xl space-y-4">
-      <h1 className="text-3xl font-bold">Create Course</h1>
+    <form onSubmit={handleSubmit} className="max-w-6xl space-y-8">
+      <h1 className="text-4xl font-bold">Create Course</h1>
 
       <input
         type="text"

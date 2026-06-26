@@ -1,36 +1,55 @@
 import { NextResponse } from "next/server";
-import Enrollment from "@/models/Enrollment";
 import connectDB from "@/lib/mongodb";
+import Enrollment from "@/models/Enrollment";
 
 export async function POST(req) {
   try {
     await connectDB();
 
-    const body = await req.json();
+    const { studentId, courseId } = await req.json();
 
-    console.log("BODY:", body);
+    // Validation
+    if (!studentId || !courseId) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Missing studentId or courseId",
+        },
+        { status: 400 },
+      );
+    }
 
+    // Already enrolled?
     const exists = await Enrollment.findOne({
-      studentId: body.studentId,
-      courseId: body.courseId,
+      studentId,
+      courseId,
     });
 
     if (exists) {
       return NextResponse.json({
-        message: "Already enrolled",
+        success: true,
+        alreadyEnrolled: true,
       });
     }
+
+    // Save enrollment
     const enrollment = await Enrollment.create({
-      studentId: body.studentId,
-      courseId: body.courseId,
+      studentId,
+      courseId,
     });
 
-    return NextResponse.json(enrollment);
+    return NextResponse.json({
+      success: true,
+      message: "Enrollment Successful",
+      enrollment,
+    });
   } catch (error) {
-    console.error("ENROLL ERROR:", error);
+    console.log(error);
+
     return NextResponse.json(
       {
-        error: error.message,
+        success: false,
+        message: "Server Error",
       },
       { status: 500 },
     );
